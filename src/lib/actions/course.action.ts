@@ -2,10 +2,7 @@
 import Account from "../models/account.model";
 import Course from "../models/course.model";
 import connectDB from "../mongoose";
-import { CourseParams } from "../../../types";
-import { SortDesc } from "lucide-react";
-import { revalidatePath } from "next/cache";
-import Lesson from "../models/lesson.model";
+import { ICourseParams } from "../../../types";
 
 export const CreateCourse = async ({
   id,
@@ -14,21 +11,13 @@ export const CreateCourse = async ({
   price,
   instructor_id,
   poster,
-}: CourseParams) => {
+}: ICourseParams) => {
   try {
     await connectDB();
 
     const account = await Account.findOne({ id: instructor_id });
 
     if (!account) throw new Error("Instructor not found");
-    console.log({
-      id,
-      title,
-      description,
-      price,
-      instructor_id,
-      poster,
-    });
 
     const createdCourse = await Course.findOneAndUpdate(
       {
@@ -59,7 +48,9 @@ export const CreateCourse = async ({
 export const GetCourseById = async (courseId: string) => {
   try {
     await connectDB();
-    return JSON.stringify(await Course.findOne({ id: courseId }));
+    return JSON.stringify(
+      await Course.findOne({ id: courseId }).populate("lessons")
+    );
   } catch (error: any) {
     throw new Error("Error at GetCourseById: ", error.message);
   }
