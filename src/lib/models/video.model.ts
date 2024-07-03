@@ -8,7 +8,7 @@ const LessonSchema = new Schema(
     },
     videoUrl: {
       type: String,
-      required: true,
+      default: "",
     },
     duration: {
       type: Number,
