@@ -7,12 +7,11 @@ export function cn(...inputs: ClassValue[]) {
 
 // format second and not show second
 export function formatSecond(second: number) {
-  console.log("second: ", second);
-
   if (second === 0) {
-    return "0 min";
-  } else if (second < 0) {
-    return "1 min";
+    return "0 sec";
+  }
+  if (second < 60) {
+    return `${Math.floor(second)} sec`;
   }
   const hours = Math.floor(second / 3600);
   const minutes = Math.floor((second % 3600) / 60);
