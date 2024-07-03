@@ -130,10 +130,10 @@ const LessonCourseEdit = ({ courseId }: { courseId: string }) => {
     setLessons(updatedLessons);
 
     // Log the new indices of all items
-    console.log("Updated Lesson Indices:");
-    newLessons.forEach((lesson) => {
+    // console.log("Updated Lesson Indices:");
+    /* newLessons.forEach((lesson) => {
       console.log(`Lesson ID: ${lesson.id}, New Position: ${lesson.position}`);
-    });
+    }); */
 
     try {
       // update lessons array in database

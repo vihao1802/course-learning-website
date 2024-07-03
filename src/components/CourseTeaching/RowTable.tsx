@@ -67,7 +67,7 @@ const RowTable = ({ index, course }: { index: number; course: any }) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem
-              className="cursor-pointer "
+              className="cursor-pointer"
               onClick={() => router.push(`/course/edit/${course.id}`)}
             >
               Edit
