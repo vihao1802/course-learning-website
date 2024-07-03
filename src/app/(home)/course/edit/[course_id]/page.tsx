@@ -1,7 +1,7 @@
 "use client";
-import DescriptionCourseEdit from "@/components/course/DescriptionCourseEdit";
-import PosterCourseEdit from "@/components/course/PosterCourseEdit";
-import TitleCourseEdit from "@/components/course/TitleCourseEdit";
+import DescriptionCourseEdit from "@/components/CourseEdit/DescriptionCourseEdit";
+import PosterCourseEdit from "@/components/CourseEdit/PosterCourseEdit";
+import TitleCourseEdit from "@/components/CourseEdit/TitleCourseEdit";
 import { Button } from "@/components/ui/button";
 import { GetCourseById } from "@/lib/actions/course.action";
 import { useUser } from "@clerk/nextjs";
@@ -11,16 +11,16 @@ import toast from "react-hot-toast";
 import { ArrowLeftIcon } from "lucide-react";
 import { RingLoader } from "react-spinners";
 import { cn, formatDateTime } from "@/lib/utils";
-import { Course } from "../../../../../../types";
-import PriceCourseEdit from "@/components/course/PriceCourseEdit";
-import LessonCourseEdit from "@/components/course/LessonCourseEdit";
+import { ICourse } from "../../../../../../types";
+import PriceCourseEdit from "@/components/CourseEdit/PriceCourseEdit";
+import LessonCourseEdit from "@/components/CourseEdit/LessonCourseEdit";
 
 const CourseEditPage = () => {
   const { course_id } = useParams<{ course_id: string }>();
   const { user } = useUser();
   const router = useRouter();
 
-  const [course, setCourse] = useState<Course | null>(null);
+  const [course, setCourse] = useState<ICourse | null>(null);
   const [isLoading, setLoading] = useState(true);
 
   const fetchData = async () => {

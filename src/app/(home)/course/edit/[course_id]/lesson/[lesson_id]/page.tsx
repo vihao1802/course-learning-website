@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { ArrowLeftIcon } from "lucide-react";
 import { RingLoader } from "react-spinners";
 import { cn, formatDateTime } from "@/lib/utils";
-import { Lesson } from "../../../../../../../../types";
+import { ILesson } from "../../../../../../../../types";
 import { GetLessonById } from "@/lib/actions/lesson.action";
 import TitleLessonEdit from "@/components/lesson/TitleLessonEdit";
 import VideoLessonEdit from "@/components/lesson/VideoLessonEdit";
@@ -20,7 +20,7 @@ const LessonEditPage = () => {
   const { user } = useUser();
   const router = useRouter();
 
-  const [lesson, setLesson] = useState<Lesson | null>(null);
+  const [lesson, setLesson] = useState<ILesson | null>(null);
   const [isLoading, setLoading] = useState(true);
 
   const fetchData = async () => {
@@ -29,7 +29,7 @@ const LessonEditPage = () => {
       const data = await GetLessonById(lesson_id);
 
       if (data) setLesson(JSON.parse(data));
-      console.log(lesson);
+      // console.log(lesson);
     } catch (error) {
       toast.error("Something went wrong!");
     } finally {
@@ -73,7 +73,7 @@ const LessonEditPage = () => {
         <>
           <div className="w-full flex flex-row justify-between items-center">
             <h1 className="text-lg ">
-              <span className="font-bold">Date create: </span>
+              <span className="font-bold">Created Date: </span>
               {formatDateTime(lesson.created_at)}
             </h1>
             <Button
@@ -108,7 +108,7 @@ const LessonEditPage = () => {
             <div className="space-y-6">
               <VideoLessonEdit
                 lessonId={lesson_id}
-                lessonVideoUrl={lesson.videoUrl}
+                lessonVideoUrl={lesson.video.videoUrl}
               />
             </div>
           </div>

@@ -5,14 +5,14 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { GetCoursesByAccountId } from "@/lib/actions/course.action";
-import { Course } from "../../../../types";
+import { ICourse } from "../../../../types";
 import { RingLoader } from "react-spinners";
 import RowTable from "@/components/CourseTeaching/RowTable";
 
 const YourCoursePage = () => {
   const { user } = useUser();
   const router = useRouter();
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [courses, setCourses] = useState<ICourse[]>([]);
   const [isLoading, setLoading] = useState(true);
   const [isLoadingButton, setLoadingButton] = useState(false);
 
@@ -89,12 +89,16 @@ const YourCoursePage = () => {
           </thead>
           {!isLoading && (
             <tbody>
-              {courses ? (
+              {courses && courses.length > 0 ? (
                 courses.map((course, index) => (
-                  <RowTable course={course} index={index} />
+                  <RowTable key={index} course={course} index={index} />
                 ))
               ) : (
-                <tr>You haven't created any course.</tr>
+                <tr className="text-center  text-base text-gray-600">
+                  <td colSpan={7} className="p-4">
+                    You haven't created any course.
+                  </td>
+                </tr>
               )}
             </tbody>
           )}
