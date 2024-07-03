@@ -1,8 +1,6 @@
 "use server";
-import { JoystickIcon } from "lucide-react";
 import Account from "../models/account.model";
 import connectDB from "../mongoose";
-import { create } from "domain";
 
 interface AccountParams {
   id: string;
@@ -69,7 +67,9 @@ export async function getAllAccount() {
 export async function getAccountById(id: string) {
   try {
     await connectDB();
-    const account = await Account.findById(id);
+    const account = await Account.findById(id)
+      .populate("courses")
+      .populate("lessons_progress");
     return JSON.stringify(account);
   } catch (error: any) {
     throw new Error("Error at getAccountById: ", error.message);
