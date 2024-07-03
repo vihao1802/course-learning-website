@@ -42,7 +42,7 @@ export const UpsertVideo = async ({ videoUrl, lessonId, duration }: Param) => {
     );
 
     // set video id in lesson
-    await Lesson.findByIdAndUpdate(newVideo._id, {
+    await Lesson.findByIdAndUpdate(lesson._id, {
       $set: { video: newVideo._id },
     });
 
@@ -68,7 +68,7 @@ export const GetTotalDurationByCourseId = async (courseId: string) => {
     const lessons = await Lesson.find({ course_id: course._id }).populate(
       "video"
     );
-    console.log({ lessons, courseId });
+    // console.log({ lessons, courseId });
 
     const updatedLessons = await Promise.all(
       lessons.map(async (lesson) => {
