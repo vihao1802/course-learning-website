@@ -1,4 +1,4 @@
-export interface CourseParams {
+export interface ICourseParams {
   id: string;
   title: string;
   description: string;
@@ -6,7 +6,7 @@ export interface CourseParams {
   instructor_id: string;
   poster: string;
 }
-export interface Course {
+export interface ICourse {
   id: string;
   title: string;
   description: string;
@@ -15,29 +15,45 @@ export interface Course {
   instructor_id: string;
   poster: string;
   isPublished: boolean;
-  lessons: string[];
+  lessons: ILesson[];
 }
 
-export interface Account {
+export interface IAccount {
   id: string;
   name: string;
   email: string;
   created_at: Date;
   avatar: string;
   oauth_tokes: string[];
-  courses: string[];
+  courses: ICourse[];
   purchases: string[];
-  lessons_progress: string[];
+  lessons_progress: ILessonProgress[];
 }
 
-export interface Lesson {
+export interface ILesson {
+  _id: string;
   id: string;
   title: string;
   created_at: Date;
   position: number;
   isPublished: boolean;
+  // videoUrl: string;
+  video: IVideo;
+  // duration: number;
+  course_id: string;
+  lessons_progress: ILessonProgress[];
+  // lessonProgress: LessonProgress[];
+}
+
+export interface IVideo {
+  id: string;
   videoUrl: string;
   duration: number;
-  course_id: string;
-  lessons_progress: string[];
+}
+
+export interface ILessonProgress {
+  id: string;
+  lesson_id: string;
+  account_id: string;
+  isCompleted: boolean;
 }
