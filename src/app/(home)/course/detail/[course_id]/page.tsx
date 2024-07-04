@@ -17,36 +17,22 @@ import {
 } from "@/lib/actions/lessonProgress.action";
 import { useUser } from "@clerk/nextjs";
 import toast from "react-hot-toast";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const CourseDetailPage = () => {
-  const { user } = useUser();
+  const { user, isSignedIn } = useUser();
   const { course_id } = useParams<{ course_id: string }>();
   const [course, setCourse] = useState<ICourse | null>(null);
   const [isLoading, setLoading] = useState(true);
+  const [isLoadingEnroll, setLoadingEnroll] = useState(true);
   const [isEnroll, setEnroll] = useState(false);
   const router = useRouter();
 
+  // get course detail
   useEffect(() => {
-    if (!user) return;
     const fetchData = async () => {
       try {
         const data: ICourse | null = JSON.parse(await GetCourseById(course_id));
-
-        // console.log(data?.lessons[0]);
-        if (data && data.lessons && data.lessons[0]) {
-          var check = JSON.parse(
-            await GetLessonProgressByAccountIdAndLessonId({
-              accountId: user.id,
-              lessonId: data.lessons[0].id,
-            })
-          );
-          setEnroll(true);
-        } else {
-          setEnroll(false);
-          console.log("hello");
-        }
-        console.log(check);
-
         if (data) setCourse(data);
       } catch (error: any) {
         console.log(error.message);
@@ -56,7 +42,34 @@ const CourseDetailPage = () => {
     };
 
     fetchData();
-  }, [user]);
+  }, []);
+
+  // check user is enroll
+  useEffect(() => {
+    if (!user) return;
+    const fetchData = async () => {
+      try {
+        // console.log(data?.lessons[0]);
+        if (course && course.lessons && course.lessons[0]) {
+          var check = JSON.parse(
+            await GetLessonProgressByAccountIdAndLessonId({
+              accountId: user.id,
+              lessonId: course.lessons[0].id,
+            })
+          );
+          if (check) setEnroll(true);
+          else setEnroll(false);
+          setLoadingEnroll(false);
+        } else {
+          setEnroll(false);
+        }
+      } catch (error: any) {
+        console.log(error.message);
+      }
+    };
+
+    fetchData();
+  }, [course]);
 
   const handleEnroll = async () => {
     if (!user) return toast.error("You are not signed in");
@@ -84,14 +97,13 @@ const CourseDetailPage = () => {
           accountId: user.id,
         })
       );
-      // console.log(currentLessonId);
       router.push(`/course/detail/${course_id}/lesson/${currentLessonId}`);
     } catch (error: any) {
       console.log(error.message);
     }
   };
 
-  if (!course || isLoading || !user)
+  if (!course || isLoading)
     return (
       <div className="absolute top-1/2 left-1/2 translate-x-[-50%] h-screen">
         <RingLoader
@@ -148,21 +160,38 @@ const CourseDetailPage = () => {
                 <p>Cost:</p>
                 <p className="font-bold">${course.price}</p>
               </div>
-              {course.lessons[0] ? (
-                isEnroll ? (
-                  <Button
-                    className="w-full py-2 text-white bg-slate-600 hover:bg-slate-800 mt-auto"
-                    onClick={handleContinue}
-                  >
-                    Continue{" "}
-                    <ArrowRightIcon className="ml-2" width={20} height={20} />
-                  </Button>
+              {isSignedIn ? (
+                course.lessons[0] ? (
+                  !isLoadingEnroll ? (
+                    isEnroll ? (
+                      <Button
+                        className="w-full py-2 text-white bg-slate-600 hover:bg-slate-800 mt-auto"
+                        onClick={handleContinue}
+                      >
+                        Continue{" "}
+                        <ArrowRightIcon
+                          className="ml-2"
+                          width={20}
+                          height={20}
+                        />
+                      </Button>
+                    ) : (
+                      <Button
+                        className="w-full py-2 text-white bg-green-600 hover:bg-green-700 mt-auto"
+                        onClick={handleEnroll}
+                      >
+                        Enroll Now
+                      </Button>
+                    )
+                  ) : (
+                    <Skeleton className="w-full h-10 bg-gray-400" />
+                  )
                 ) : (
                   <Button
-                    className="w-full py-2 text-white bg-green-600 hover:bg-green-700 mt-auto"
-                    onClick={handleEnroll}
+                    className="w-full py-2 text-white bg-gray-600  mt-auto"
+                    disabled
                   >
-                    Enroll Now
+                    On-going...
                   </Button>
                 )
               ) : (
@@ -170,7 +199,7 @@ const CourseDetailPage = () => {
                   className="w-full py-2 text-white bg-gray-600  mt-auto"
                   disabled
                 >
-                  On-going...
+                  Sign in to enroll now
                 </Button>
               )}
             </div>

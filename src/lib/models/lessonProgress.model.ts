@@ -29,6 +29,6 @@ const lessonProgressSchema = new Schema(
 );
 
 const LessonProgress =
-  models.LessonProgress || model("LessonProgress", lessonProgressSchema,"LessonProgress");
+  models.LessonProgress || model("LessonProgress", lessonProgressSchema);
 
 export default LessonProgress;

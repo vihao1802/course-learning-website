@@ -14,13 +14,6 @@ const YourCoursePage = () => {
   const router = useRouter();
   const [courses, setCourses] = useState<ICourse[]>([]);
   const [isLoading, setLoading] = useState(true);
-  const [isLoadingButton, setLoadingButton] = useState(false);
-
-  const handleNavigation = async () => {
-    setLoadingButton(true);
-    await router.push("/course/create");
-    setLoadingButton(false);
-  };
 
   useEffect(() => {
     if (!user) {
@@ -62,16 +55,12 @@ const YourCoursePage = () => {
             placeholder="Search..."
           />
         </div>
-        {isLoadingButton ? (
-          <div className="loading-indicator">Loading...</div>
-        ) : (
-          <Button
-            className=" bg-slate-600 hover:bg-slate-800"
-            onClick={handleNavigation}
-          >
-            Create course
-          </Button>
-        )}
+        <Button
+          className=" bg-slate-600 hover:bg-slate-800"
+          onClick={() => router.push("/course/create")}
+        >
+          Create course
+        </Button>
       </div>
       <div className="shadow-xl max-w-[1200px] overflow-x-auto w-full border border-gray-300 rounded-md">
         <table className="min-w-[1100px] w-full text-left px-2">

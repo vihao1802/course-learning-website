@@ -1,11 +1,11 @@
 import { getAccountById } from "@/lib/actions/account.action";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { Account } from "../../types";
+import { IAccount } from "../../types";
 import { Skeleton } from "./ui/skeleton";
 
 const TextAccountName = ({ accountId }: { accountId: string }) => {
-  const [account, setAccount] = useState<Account | null>(null);
+  const [account, setAccount] = useState<IAccount | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {

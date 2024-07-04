@@ -3,22 +3,30 @@ import { ILesson } from "../../types";
 import { Skeleton } from "./ui/skeleton";
 import { Button } from "./ui/button";
 import Image from "next/image";
-import { GetLessonById } from "@/lib/actions/lesson.action";
+import { GetLessonByAccountIdAndLessonId } from "@/lib/actions/lesson.action";
 import toast from "react-hot-toast";
+import { CircleXIcon } from "lucide-react";
 
 interface Props {
+  accountId: string;
   lessonId: string;
   markAsCompleted: (status: Boolean) => void;
 }
 
-const ButtonMarkAsCompleted = ({ lessonId, markAsCompleted }: Props) => {
+const ButtonMarkAsCompleted = ({
+  lessonId,
+  accountId,
+  markAsCompleted,
+}: Props) => {
   const [lesson, setLesson] = useState<ILesson | null>(null);
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = JSON.parse(await GetLessonById(lessonId));
+        const data = JSON.parse(
+          await GetLessonByAccountIdAndLessonId({ accountId, lessonId })
+        );
 
         setLesson(data);
       } catch (error) {
@@ -42,14 +50,8 @@ const ButtonMarkAsCompleted = ({ lessonId, markAsCompleted }: Props) => {
           className="px-2 py-1 border-2 bg-gray-500 hover:bg-gray-600"
           onClick={() => markAsCompleted(false)}
         >
-          <Image
-            src={"/icons/mark_completed.png"}
-            alt="Logo Check"
-            width={20}
-            height={20}
-            className="mr-2"
-          />
-          Keep as Incomplete
+          <CircleXIcon width={22} height={22} className="mr-2" />
+          Mark as Incomplete
         </Button>
       ) : (
         <Button

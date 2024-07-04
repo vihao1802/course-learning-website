@@ -1,24 +1,20 @@
 "use client";
 import { useParams, useRouter } from "next/navigation";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { formatDate, formatSecond } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import ProgressBar from "@/components/ProgressBar";
 import toast from "react-hot-toast";
-import { ILesson } from "../../../../../../../../types";
+import { ILesson, ILessonProgress } from "../../../../../../../../types";
 import {
+  GetAllLessonsByCourseId,
   GetLessonById,
   GetLessonIdsByCourseId,
 } from "@/lib/actions/lesson.action";
 import { RingLoader } from "react-spinners";
 import LessonListLearning from "@/components/LessonListLearning";
-import {
-  UpdateStatusLessonProgress,
-  UpsertLessonProgress,
-} from "@/lib/actions/lessonProgress.action";
+import { UpdateStatusLessonProgress } from "@/lib/actions/lessonProgress.action";
 import { useUser } from "@clerk/nextjs";
-import { ArrowLeftFromLine, FrownIcon } from "lucide-react";
+import { ArrowLeftFromLine, CircleCheckBigIcon, FrownIcon } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -27,6 +23,8 @@ import {
 } from "@/components/ui/tooltip";
 import { Skeleton } from "@/components/ui/skeleton";
 import ButtonMarkAsCompleted from "@/components/ButtonMarkAsCompleted";
+import LessonProgressBar from "@/components/LessonProgressBar";
+import ProgressBar from "@/components/ProgressBar";
 
 const LessonPage = () => {
   const { user } = useUser();
@@ -37,18 +35,18 @@ const LessonPage = () => {
   const [lesson, setLesson] = useState<ILesson | null>(null);
   const router = useRouter();
   const [isLoading, setLoading] = useState(true);
+  const [isLoadingCurIndex, setLoadingCurIndex] = useState(true);
   const [lessonIds, setLessonIds] = useState<string[] | []>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [result, setResult] = useState(0);
   const [key, setKey] = useState(0);
+  const [lessons, setLessons] = useState<ILesson[] | []>([]);
 
+  // get lesson by id
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = JSON.parse(await GetLessonById(lesson_id));
-        const ids = JSON.parse(await GetLessonIdsByCourseId(course_id));
-
-        setLessonIds(ids);
-        setCurrentIndex(ids.findIndex((id: string) => id === lesson_id));
         setLesson(data);
       } catch (error) {
         toast.error("Something went wrong");
@@ -61,8 +59,76 @@ const LessonPage = () => {
     fetchData();
   }, []);
 
+  // get current index
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const ids = JSON.parse(await GetLessonIdsByCourseId(course_id));
+        setLessonIds(ids);
+        setCurrentIndex(ids.findIndex((id: string) => id === lesson_id));
+      } catch (error) {
+        toast.error("Something went wrong");
+        console.log("Something went wrong at LessonPage");
+      } finally {
+        setLoadingCurIndex(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // get all lessons by course Id and Account Id
+  useEffect(() => {
+    if (!user) return;
+    const fetchData = async () => {
+      try {
+        // get all lesson in this course with the account id signed in
+        const data: ILesson[] = JSON.parse(
+          await GetAllLessonsByCourseId({ course_id, account_id: user.id })
+        );
+        setLessons(data);
+      } catch (error: any) {
+        console.log(error.message);
+      }
+    };
+    fetchData();
+  }, [user, key]);
+
+  // get completed percentage
+
+  useEffect(() => {
+    if (!user || lessons.length === 0) return;
+    const fetchData = async () => {
+      try {
+        // get array with filter item === lesson.id and item is completed (is true)
+        // if filter is correct that means array will be 1 and 0 otherwise
+        const arr = lessons.map((lesson) => {
+          return lesson.lessons_progress.filter(
+            (item: ILessonProgress) =>
+              item.lesson_id === lesson._id && item.isCompleted
+          ).length;
+        });
+
+        // calculate sum of all item in arr
+        const totalCompleted = arr.reduce(
+          (cur: number, val: number) => cur + val,
+          0
+        );
+
+        // calculate percentage
+        const percentage =
+          Math.round((totalCompleted / lessons.length) * 100 * 100) / 100;
+
+        setResult(percentage);
+      } catch (error: any) {
+        console.log(error.message);
+      }
+    };
+
+    fetchData();
+  }, [lessons, key]);
+
   const handleClickPrev = async () => {
-    // console.log(lessonIds[currentIndex - 1]);
     router.replace(
       `/course/detail/${course_id}/lesson/${lessonIds[currentIndex - 1]}`
     );
@@ -87,12 +153,6 @@ const LessonPage = () => {
       console.log(error.message);
     }
   };
-
-  // handle progressbar video
-  const [progress, setProgress] = useState<number>(0);
-  const [duration, setDuration] = useState<number>(0);
-
-  let percentage = (progress / duration) * 100;
 
   return (
     <div className="relative  h-[calc(100vh-60px)]  flex flex-row gap-2 ">
@@ -132,48 +192,23 @@ const LessonPage = () => {
           </div>
           <div className="p-3 space-y-4 flex-grow">
             <div className="flex flex-row justify-between ">
-              {/* <div>
-                {!lesson ? (
-                  <Skeleton className=" w-44 h-10 bg-gray-400" />
-                ) : lesson.lessons_progress.find(
-                    (item) => item.lesson_id === lesson._id
-                  )?.isCompleted ? (
-                  <Button
-                    className="px-2 py-1 border-2 bg-gray-500 hover:bg-gray-600"
-                    onClick={() => markAsCompleted(false)}
-                  >
-                    <Image
-                      src={"/icons/mark_completed.png"}
-                      alt="Logo Check"
-                      width={20}
-                      height={20}
-                      className="mr-2"
-                    />
-                    Keep as Incomplete
-                  </Button>
-                ) : (
-                  <Button
-                    className="px-2 py-1 border-2 bg-green-500  hover:bg-green-600"
-                    onClick={() => markAsCompleted(true)}
-                  >
-                    <Image
-                      src={"/icons/mark_completed.png"}
-                      alt="Logo Check"
-                      width={20}
-                      height={20}
-                      className="mr-2"
-                    />
-                    Mark as Completed
-                  </Button>
-                )}
-              </div> */}
-
-              <ButtonMarkAsCompleted
-                key={key}
-                lessonId={lesson_id}
-                markAsCompleted={markAsCompleted}
-              />
+              {user ? (
+                <ButtonMarkAsCompleted
+                  key={key}
+                  lessonId={lesson_id}
+                  accountId={user.id}
+                  markAsCompleted={markAsCompleted}
+                />
+              ) : (
+                <Skeleton className=" w-44 h-10 bg-gray-400" />
+              )}
               <div className="flex flex-row justify-end gap-2">
+                {isLoadingCurIndex && (
+                  <Skeleton className="w-[120px] h-10 bg-gray-400" />
+                )}
+                {isLoadingCurIndex && (
+                  <Skeleton className="w-[120px] h-10 bg-gray-400" />
+                )}
                 {currentIndex > 0 && (
                   <Button
                     className="w-[120px] py-1 border-2 text-slate-700 border-slate-700 hover:bg-white"
@@ -227,9 +262,17 @@ const LessonPage = () => {
           </div>
         </div>
       </div>
-      <div className="fixed top-[60px] pt-[12px] right-0 bottom-0 w-1/3">
-        <div className="flex flex-col h-full">
-          <div className="px-4 space-y-2">
+      <div className="fixed top-[60px] right-0 bottom-0 w-1/3">
+        <div className="flex flex-col h-full ">
+          {result === 100 && (
+            <div className="w-full text-center py-4  bg-green-700">
+              <p className="text-white flex flex-row justify-center gap-2 items-center">
+                <CircleCheckBigIcon width={22} height={22} />
+                Congrats! You've completed this course
+              </p>
+            </div>
+          )}
+          <div className="px-4 pt-2 space-y-2">
             <div className="flex flex-row justify-between items-center">
               <h2 className="font-bold text-xl">Your progress</h2>
               <TooltipProvider>
@@ -248,9 +291,22 @@ const LessonPage = () => {
                 </Tooltip>
               </TooltipProvider>
             </div>
-            <div className="text-right">
-              <ProgressBar value={20} />
-              <span>20%</span>
+            {/* {!isLoadingCurIndex && user ? (
+              <LessonProgressBar
+                key={key}
+                lessonsLength={lessonIds.length}
+                courseId={course_id}
+                accountId={user.id}
+              />
+            ) : (
+              <div className="pb-2">
+                <Skeleton className="w-full h-2 bg-gray-400" />
+                <Skeleton className="w-28 h-5 bg-gray-400 ml-auto mt-1" />
+              </div>
+            )} */}
+            <div className="text-right pb-2 text-green-600">
+              <ProgressBar value={result} />
+              <span>Completed {result}%</span>
             </div>
           </div>
 

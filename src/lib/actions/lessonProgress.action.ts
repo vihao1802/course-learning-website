@@ -117,7 +117,7 @@ export const GetLessonProgressCurrent = async ({
       })
       .populate("lessons_progress");
 
-    const lesson = lessons.find((l) => {
+    let lesson = lessons.find((l) => {
       const lessonProgress = l.lessons_progress.find(
         (lp: ILessonProgress) =>
           lp.account_id.toString() === account._id.toString()
@@ -126,7 +126,8 @@ export const GetLessonProgressCurrent = async ({
       return !lessonProgress.isCompleted;
     });
 
-    // console.log({ lesson });
+    if (lesson === undefined) lesson = lessons[lessons.length - 1];
+    console.log({ lesson });
 
     return JSON.stringify(lesson.id);
   } catch (error: any) {

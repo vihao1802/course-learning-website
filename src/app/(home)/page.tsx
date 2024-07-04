@@ -4,11 +4,11 @@ import { GetAllCourses } from "@/lib/actions/course.action";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { Course } from "../../../types";
+import { ICourse } from "../../../types";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Home() {
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [courses, setCourses] = useState<ICourse[]>([]);
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {

@@ -72,6 +72,6 @@ export async function getAccountById(id: string) {
       .populate("lessons_progress");
     return JSON.stringify(account);
   } catch (error: any) {
-    throw new Error("Error at getAccountById: ", error.message);
+    throw new Error("Error at getAccountById: " + error.message);
   }
 }

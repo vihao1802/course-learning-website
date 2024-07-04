@@ -3,7 +3,7 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { ILessonProgress, ILesson } from "../../types";
-import { GetAllLessonsByCourseIdAndAccountId } from "@/lib/actions/lesson.action";
+import { GetAllLessonsByCourseId } from "@/lib/actions/lesson.action";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "./ui/skeleton";
@@ -27,9 +27,12 @@ const LessonListLearning = ({
     const fetchData = async () => {
       try {
         const data = JSON.parse(
-          await GetAllLessonsByCourseIdAndAccountId(courseId, user.id)
+          await GetAllLessonsByCourseId({
+            course_id: courseId,
+            account_id: user.id,
+          })
         );
-        console.log(data);
+        // console.log(data);
 
         setLessons(data);
       } catch (error) {
