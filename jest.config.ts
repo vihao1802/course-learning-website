@@ -7,7 +7,10 @@ import type { Config } from "jest";
 import nextJest from "next/jest.js";
 import dotenv from "dotenv";
 
-dotenv.config({ path: "./.env.test" });
+// Load environment variables only if not in CI
+if (process.env.CI !== "true") {
+  dotenv.config({ path: "./.env.local" });
+}
 
 const createJestConfig = nextJest({
   // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
