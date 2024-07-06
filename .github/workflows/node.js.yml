@@ -28,6 +28,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
 
+      - name: Set time zone
+        run: |
+          sudo timedatectl set-timezone Asia/Bangkok
+
       - name: npm install, build and test
         run: |
           npm ci
