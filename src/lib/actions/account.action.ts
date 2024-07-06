@@ -1,11 +1,13 @@
 "use server";
 import Account from "../models/account.model";
+import Course from "../models/course.model";
+import Lesson from "../models/lesson.model";
+import LessonProgress from "../models/lessonProgress.model";
 import connectDB from "../mongoose";
 
 interface AccountParams {
   id: string;
   email: string;
-  // created_at: number;
   avatar: string;
   name: string;
 }
@@ -13,16 +15,15 @@ interface AccountParams {
 export const upsertAccount = async ({
   id,
   email,
-  // created_at,
   avatar,
   name,
 }: AccountParams) => {
   try {
     await connectDB();
     const account = await Account.findOne({ email });
-
+    let createdAccount;
     if (!account) {
-      const createdAccount = new Account({
+      createdAccount = new Account({
         id,
         email,
         name,
@@ -30,43 +31,27 @@ export const upsertAccount = async ({
       });
       await createdAccount.save();
     } else {
-      await Account.updateOne({ email }, { name, avatar });
+      createdAccount = await Account.updateOne(
+        { email },
+        { name, avatar },
+        { new: true }
+      );
     }
 
     console.log("UpSerted account successfully");
+
+    return JSON.stringify(createdAccount);
   } catch (error: any) {
     throw new Error("Error at upsertAccount: ", error.message);
   }
 };
 
-export async function getAllAccount() {
-  try {
-    // await connectDB();
-    // const account = await Account.findOne({ email: "asds" });
-    // if (!account) {
-    //   const createdAccount = new Account({
-    //     email: "asds",
-    //     name: "Shad man",
-    //     avatar: "abc.jpg",
-    //   });
-    //   await createdAccount.save();
-    // } else {
-    //   await Account.updateOne(
-    //     { email: "asds" },
-    //     { name: "T-90", avatar: "abc.jpg" }
-    //   );
-    // }
-    // console.log("Account upSerted");
-    // return JSON.stringify([]);
-    // return JSON.stringify(accounts);
-  } catch (error: any) {
-    throw new Error("Error at getAllAccount: ", error.message);
-  }
-}
-
 export async function getAccountById(id: string) {
   try {
     await connectDB();
+    await Course.find({});
+    await LessonProgress.find({});
+
     const account = await Account.findById(id)
       .populate("courses")
       .populate("lessons_progress");

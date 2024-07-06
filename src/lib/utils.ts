@@ -14,17 +14,15 @@ export function formatSecond(second: number) {
     return `${Math.floor(second)} sec`;
   }
   const hours = Math.floor(second / 3600);
-  const minutes = Math.floor((second % 3600) / 60);
-  // const seconds = second % 60;
   let str = "";
-  if (hours) str += `${hours}h `;
-  if (minutes) str += `${minutes >= 10 ? minutes : "0" + minutes} min`;
-  return str;
-}
+  if (hours) {
+    str += `${hours}h `;
+    second -= hours * 3600;
+  }
 
-export function isBase64Image(imageData: string) {
-  const base64Regex = /^data:image\/(png|jpe?g|gif|webp);base64,/;
-  return base64Regex.test(imageData);
+  const minutes = Math.floor(second / 60);
+  if (minutes && second !== 0) str += `${String(minutes).padStart(2, "0")} min`;
+  return str;
 }
 
 export function formatDate(date: Date) {

@@ -84,6 +84,8 @@ export const GetCoursesTeachingByAccountId = async (userId: string) => {
       created_at: -1,
     });
 
+    return JSON.stringify(courses);
+
     /*  return JSON.stringify(
       
     ); */
