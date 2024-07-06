@@ -8,14 +8,10 @@ import { ICourse } from "../../../types";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Home() {
-  const [courses, setCourses] = useState<ICourse[]>([]);
+  const [courses, setCourses] = useState<ICourse[] | []>([]);
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    // if(!user) {
-    //   setLoading(true)
-    //   return
-    // }
     const fetchData = async () => {
       setLoading(true);
       try {

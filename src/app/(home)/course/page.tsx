@@ -85,7 +85,7 @@ const YourCoursePage = () => {
               ) : (
                 <tr className="text-center  text-base text-gray-600">
                   <td colSpan={7} className="p-4">
-                    You haven't created any course.
+                    You haven&apos;t created any course.
                   </td>
                 </tr>
               )}

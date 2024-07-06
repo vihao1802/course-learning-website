@@ -268,7 +268,7 @@ const LessonPage = () => {
             <div className="w-full text-center py-4  bg-green-700">
               <p className="text-white flex flex-row justify-center gap-2 items-center">
                 <CircleCheckBigIcon width={22} height={22} />
-                Congrats! You've completed this course
+                Congrats! You&apos;ve completed this course
               </p>
             </div>
           )}

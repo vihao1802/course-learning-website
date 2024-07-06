@@ -13,7 +13,7 @@ const TextAccountName = ({ accountId }: { accountId: string }) => {
         const data = JSON.parse(await getAccountById(accountId));
         if (data) setAccount(data);
       } catch (error) {
-        toast.error("Something went wrong in TextFormatDuration");
+        toast.error("Something went wrong in TextAccountName");
       }
     };
 
