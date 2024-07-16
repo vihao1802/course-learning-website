@@ -7,14 +7,20 @@ import Link from "next/link";
 import { Skeleton } from "./ui/skeleton";
 import { formatSecond } from "@/lib/utils";
 
-const LessonsShowcase = ({ courseId }: { courseId: string }) => {
+const LessonsShowcase = ({
+  courseObjectId,
+  courseId,
+}: {
+  courseObjectId: string;
+  courseId: string;
+}) => {
   const [lessons, setLessons] = useState<ILesson[] | []>([]);
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = JSON.parse(await GetAllLessonByCourseId(courseId));
+        const data = JSON.parse(await GetAllLessonByCourseId(courseObjectId));
         setLessons(data);
       } catch (error) {
         toast.error("Something went wrong");

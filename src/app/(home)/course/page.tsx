@@ -16,13 +16,15 @@ const YourCoursePage = () => {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (user === undefined) return;
+
     if (!user) {
+      setLoading(false);
       return;
     }
 
     const fetchData = async () => {
       try {
-        setLoading(true);
         const data = await GetCoursesByAccountId(user.id);
         if (data) setCourses(JSON.parse(data));
       } catch (error: any) {

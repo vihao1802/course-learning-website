@@ -18,6 +18,7 @@ import {
 import { useUser } from "@clerk/nextjs";
 import toast from "react-hot-toast";
 import { Skeleton } from "@/components/ui/skeleton";
+import Image from "next/image";
 
 const CourseDetailPage = () => {
   const { user, isSignedIn } = useUser();
@@ -25,14 +26,14 @@ const CourseDetailPage = () => {
   const [course, setCourse] = useState<ICourse | null>(null);
   const [isLoading, setLoading] = useState(true);
   const [isLoadingEnroll, setLoadingEnroll] = useState(true);
-  const [isEnroll, setEnroll] = useState(false);
+  // const [isEnroll, setEnroll] = useState(false);
   const router = useRouter();
 
   // get course detail
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data: ICourse | null = JSON.parse(await GetCourseById(course_id));
+        const data = JSON.parse(await GetCourseById(course_id));
         if (data) setCourse(data);
       } catch (error: any) {
         console.log(error.message);
@@ -51,17 +52,17 @@ const CourseDetailPage = () => {
       try {
         // console.log(data?.lessons[0]);
         if (course && course.lessons && course.lessons[0]) {
-          var check = JSON.parse(
+          /* var check = JSON.parse(
             await GetLessonProgressByAccountIdAndLessonId({
               accountId: user.id,
-              lessonId: course.lessons[0].id,
+              lessonId: course.lessons[0]._id,
             })
-          );
-          if (check) setEnroll(true);
-          else setEnroll(false);
+          ); */
+          // if (check) setEnroll(true);
+          // else setEnroll(false);
           setLoadingEnroll(false);
         } else {
-          setEnroll(false);
+          // setEnroll(false);
         }
       } catch (error: any) {
         console.log(error.message);
@@ -89,11 +90,11 @@ const CourseDetailPage = () => {
 
   const handleContinue = async () => {
     if (!user) return toast.error("You are not signed in");
-
+    if (!course) return;
     try {
       const currentLessonId = JSON.parse(
         await GetLessonProgressCurrent({
-          courseId: course_id,
+          courseId: course._id,
           accountId: user.id,
         })
       );
@@ -125,17 +126,25 @@ const CourseDetailPage = () => {
       <div className="flex flex-col gap-4">
         <h1 className="text-3xl font-bold">{course.title}</h1>
         <p className="text-gray-700">{course.description}</p>
-        <InstructorInfo accountId={course.instructor_id} />
+
+        <InstructorInfo account={course.instructor_id} />
         <div>
           <div className="relative grid grid-cols-1 lg:grid-cols-3 gap-5">
             <div className="col-span-2">
-              <img
-                src={course.poster}
-                alt="Banner"
-                loading="lazy"
-                className="rounded-md w-full h-auto aspect-video object-cover border border-gray-300"
+              <div className="relative aspect-video">
+                <Image
+                  priority
+                  src={course.poster}
+                  alt="Banner"
+                  fill
+                  sizes="(max-width: 1000px)100vw"
+                  className="rounded-lg border"
+                />
+              </div>
+              <LessonsShowcase
+                courseObjectId={course._id}
+                courseId={course_id}
               />
-              <LessonsShowcase courseId={course_id} />
             </div>
 
             <div className="sticky col-span-1 top-[60px] right-0 flex flex-col flex-grow space-y-4 max-h-[280px] h-auto p-3 rounded-md shadow-2xl border-2">
@@ -163,27 +172,23 @@ const CourseDetailPage = () => {
               {isSignedIn ? (
                 course.lessons[0] ? (
                   !isLoadingEnroll ? (
-                    isEnroll ? (
-                      <Button
-                        className="w-full py-2 text-white bg-slate-600 hover:bg-slate-800 mt-auto"
-                        onClick={handleContinue}
-                      >
-                        Continue{" "}
-                        <ArrowRightIcon
-                          className="ml-2"
-                          width={20}
-                          height={20}
-                        />
-                      </Button>
-                    ) : (
+                    // isEnroll ? (
+                    <Button
+                      className="w-full py-2 text-white bg-slate-600 hover:bg-slate-800 mt-auto"
+                      onClick={handleContinue}
+                    >
+                      Start course{" "}
+                      <ArrowRightIcon className="ml-2" width={20} height={20} />
+                    </Button>
+                  ) : (
+                    /* ) : (
                       <Button
                         className="w-full py-2 text-white bg-green-600 hover:bg-green-700 mt-auto"
                         onClick={handleEnroll}
                       >
                         Enroll Now
                       </Button>
-                    )
-                  ) : (
+                    ) */
                     <Skeleton className="w-full h-10 bg-gray-400" />
                   )
                 ) : (

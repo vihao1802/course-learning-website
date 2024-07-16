@@ -5,20 +5,9 @@ import { cn, formatDate, formatSecond } from "@/lib/utils";
 import Image from "next/image";
 import TextFormatDuration from "./TextFormatDuration";
 import TextAccountName from "./TextAccountName";
+import { ICourse } from "../../types";
 
-interface CourseCardProps {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  created_at: Date;
-  instructor_id: string;
-  poster: string;
-  isPublished: boolean;
-  duration: number;
-}
-
-const CourseCard: FC<{ course: CourseCardProps }> = ({ course }) => {
+const CourseCard: FC<{ course: ICourse }> = ({ course }) => {
   return (
     <div className="relative w-full h-auto sm:min-h-[350px] shadow-lg rounded-md flex flex-col border border-gray-300">
       <Link
@@ -46,7 +35,7 @@ const CourseCard: FC<{ course: CourseCardProps }> = ({ course }) => {
         </h1>
         <div className="flex flex-row justify-between text-gray-500  mt-auto">
           <div className="text-gray-500">
-            <TextAccountName accountId={course.instructor_id} />
+            <div>{course.instructor_id.name}</div>
           </div>
           <Badge
             variant={"secondary"}

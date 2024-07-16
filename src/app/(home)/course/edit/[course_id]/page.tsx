@@ -117,7 +117,10 @@ const CourseEditPage = () => {
                 courseId={course_id}
                 coursePrice={course.price}
               />
-              <LessonCourseEdit courseId={course_id} />
+              <LessonCourseEdit
+                courseObjectId={course._id}
+                courseId={course_id}
+              />
             </div>
           </div>
         </>
