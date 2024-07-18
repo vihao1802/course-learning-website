@@ -3,14 +3,12 @@
 
 <div align="center">
     <a href="https://github.com/vihao1802/course-learning-website/pulls">
-        <img src="https://img.shields.io/github/issues-pr-closed/vihao1802/course-learning-website
-        "
+        <img src="https://img.shields.io/github/issues-pr-closed/vihao1802/course-learning-website"
         alt="Pull Requests Badge"
          />
     </a>
     <a href="https://github.com/vihao1802/course-learning-website/graphs/contributors">
-        <img src="https://img.shields.io/github/contributors/vihao1802/course-learning-website
-        "
+        <img src="https://img.shields.io/github/contributors/vihao1802/course-learning-website"
         alt="Contributors Badge"
          />
     </a>
