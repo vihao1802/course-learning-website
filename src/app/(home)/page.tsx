@@ -16,7 +16,7 @@ export default function Home() {
       setLoading(true);
       try {
         const data = await GetAllCourses();
-        console.log(JSON.parse(data));
+        // console.log(JSON.parse(data));
         setCourses(JSON.parse(data));
       } catch (error) {
         toast.error("Error fetch data");
