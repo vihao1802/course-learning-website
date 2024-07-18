@@ -32,7 +32,6 @@ const LessonListLearning = ({
             account_id: user.id,
           })
         );
-        // console.log(data);
 
         setLessons(data);
       } catch (error) {

@@ -1,6 +1,7 @@
 "use server";
 
-import { ILessonProgress } from "../../../types";
+import mongoose from "mongoose";
+import { ILesson, ILessonProgress } from "../../../types";
 import Account from "../models/account.model";
 import Course from "../models/course.model";
 import Lesson from "../models/lesson.model";
@@ -80,12 +81,12 @@ export const GetLessonProgressByAccountIdAndLessonId = async ({
     const account = await Account.findOne({ id: accountId });
     if (!account) throw new Error("Account not found");
 
-    const lesson = await Lesson.findOne({ id: lessonId });
-    if (!lesson) throw new Error("Lesson not found");
+    // const lesson = await Lesson.findOne({ id: lessonId });
+    if (!lessonId) throw new Error("Lesson not found");
 
     const lessonProgress = await LessonProgress.findOne({
       account_id: account._id,
-      lesson_id: lesson._id,
+      lesson_id: lessonId,
     });
 
     return JSON.stringify(lessonProgress);
@@ -105,31 +106,40 @@ export const GetLessonProgressCurrent = async ({
     const account = await Account.findOne({ id: accountId });
     if (!account) throw new Error("Account not found");
 
-    const course = await Course.findOne({
+    /* const course = await Course.findOne({
       id: courseId,
     });
-    if (!course) throw new Error("Course not found");
+    if (!course) throw new Error("Course not found"); */
 
     // find the first lesson that is not completed and return id of that lesson match with lessonProgress
-    const lessons = await Lesson.find({ course_id: course._id })
+    const lessons = await Lesson.find({ course_id: courseId })
       .sort({
         position: 1,
       })
-      .populate("lessons_progress");
+      .populate({
+        path: "lessons_progress",
+        match: { account_id: account._id },
+      });
 
-    let lesson = lessons.find((l) => {
-      const lessonProgress = l.lessons_progress.find(
-        (lp: ILessonProgress) =>
-          lp.account_id.toString() === account._id.toString()
-      );
-      // console.log(lessonProgress);
-      return !lessonProgress.isCompleted;
+    // console.log({ LessonProgress: lessons.lessons_progress });
+    // log lesson progress
+    lessons.forEach((lesson) => {
+      console.log(lesson.lessons_progress);
     });
 
-    if (lesson === undefined) lesson = lessons[lessons.length - 1];
-    console.log({ lesson });
+    // let lesson = lessons.find((l: ILesson) => {
+    /* const lessonProgress = l.lessons_progress.find(
+        (lp: ILessonProgress) =>
+          lp.account_id.toString() === account._id.toString()
+      ); */
+    // console.log(lessonProgress);
+    //   return !l.lessons_progress.;
+    // });
 
-    return JSON.stringify(lesson.id);
+    // if (lesson === undefined) lesson = lessons[lessons.length - 1];
+    // console.log({ lesson });
+
+    return JSON.stringify(lessons[0].id);
   } catch (error: any) {
     throw new Error(error.message);
   }
@@ -151,11 +161,27 @@ export const UpdateStatusLessonProgress = async ({
     const lesson = await Lesson.findOne({ id: lessonId });
     if (!lesson) throw new Error("Lesson not found");
 
+    const lessonProgressSchema = {
+      account_id: account._id,
+      lesson_id: lesson._id,
+      isCompleted: status,
+    };
+
     const lessonProgress = await LessonProgress.findOneAndUpdate(
       { account_id: account._id, lesson_id: lesson._id },
-      { isCompleted: status },
-      { new: true }
+      lessonProgressSchema,
+      { new: true, upsert: true }
     );
+
+    await Lesson.updateOne(
+      { _id: lesson._id },
+      {
+        $addToSet: {
+          lessons_progress: lessonProgress._id,
+        },
+      }
+    );
+
     return JSON.stringify(lessonProgress);
   } catch (error: any) {
     throw new Error(error.message);

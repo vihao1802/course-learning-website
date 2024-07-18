@@ -16,6 +16,7 @@ export default function Home() {
       setLoading(true);
       try {
         const data = await GetAllCourses();
+        // console.log(JSON.parse(data));
         setCourses(JSON.parse(data));
       } catch (error) {
         toast.error("Error fetch data");
@@ -31,7 +32,7 @@ export default function Home() {
     <main className="max-w-[1000px] w-full mx-auto h-auto p-6">
       <div className="flex flex-col sm:flex-row justify-between gap-3 sm:items-center">
         <h1 className="text-2xl font-bold ">All course</h1>
-        <div className="w-auto flex flex-row items-center gap-2 h-full p-2 border-2 border-gray-600 rounded-md ">
+        {/* <div className="w-auto flex flex-row items-center gap-2 h-full p-2 border-2 border-gray-600 rounded-md ">
           <Image
             src={"/icons/search-outline.svg"}
             alt={"Icon Search"}
@@ -43,15 +44,12 @@ export default function Home() {
             type="text"
             placeholder="Search..."
           />
-        </div>
+        </div> */}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 w-full mt-5 sm:mt-10">
         {!isLoading
           ? courses.map((course) => (
-              <CourseCard
-                key={course.id}
-                course={{ ...course, duration: 20 }}
-              />
+              <CourseCard key={course.id} course={course} />
             ))
           : Array.from({ length: 6 }).map((_, index) => (
               <div

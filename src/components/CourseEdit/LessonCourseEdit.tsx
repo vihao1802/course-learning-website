@@ -44,7 +44,13 @@ const formSchema = z.object({
   }),
 });
 
-const LessonCourseEdit = ({ courseId }: { courseId: string }) => {
+const LessonCourseEdit = ({
+  courseId,
+  courseObjectId,
+}: {
+  courseObjectId: string;
+  courseId: string;
+}) => {
   const [lessons, setLessons] = useState<Lesson[] | []>([]);
   const [isLoading, setLoading] = useState(true);
   const [refreshFlag, setRefreshFlag] = useState(false);
@@ -53,10 +59,10 @@ const LessonCourseEdit = ({ courseId }: { courseId: string }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await GetAllLessonByCourseId(courseId);
+        const res = await GetAllLessonByCourseId(courseObjectId);
         setLessons(JSON.parse(res));
       } catch (error: any) {
-        toast.error("Something went wrong with fetchData");
+        toast.error("Something went wrong with fetchData at LessonCourseEdit");
         console.log(error.message);
       } finally {
         setLoading(false);

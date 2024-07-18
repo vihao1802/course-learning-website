@@ -8,6 +8,7 @@ import {
   SignedOut,
   UserButton,
   ClerkLoading,
+  useAuth,
 } from "@clerk/nextjs";
 
 import { useUser } from "@clerk/nextjs";
@@ -23,7 +24,7 @@ const playfair = Playfair_Display({
 
 const NavBar = () => {
   const router = useRouter();
-  const { isSignedIn, user, isLoaded } = useUser();
+  const { isSignedIn, user } = useUser();
 
   return (
     <div className="fixed top-0 z-50 w-full h-[60px] px-6 py-4 bg-slate-700 flex flex-row justify-between items-center">
@@ -32,24 +33,21 @@ const NavBar = () => {
           Course Learning
         </h1>
       </Link>
-      <ul className="flex flex-row gap-4 text-white font-bold text-lg">
-        <li>
-          <Link href={"/"} className="hover:text-blue-700">
-            Home
-          </Link>
-        </li>
-        <li>
-          <Link href={"/course"} className="hover:text-blue-700">
+      <div className="flex gap-3 items-center">
+        {user && (
+          <Link
+            href={"/course"}
+            className="text-white font-bold px-4 py-2 hover:text-blue-700 "
+          >
             Your Course
           </Link>
-        </li>
-      </ul>
-      <div className="flex gap-3 items-center">
+        )}
+        {user && <div className="w-[2px] h-[30px] bg-white"></div>}
         <SignedOut>
           <SignUpButton>
             {/* Custom sign up button */}
             <Button
-              className="bg-inherit hover:text-blue-700 hover:bg-inherit"
+              className="bg-inherit text-base hover:text-blue-700 hover:bg-inherit"
               onClick={() => router.push("/sign-up")}
             >
               Sign Up
@@ -57,21 +55,40 @@ const NavBar = () => {
           </SignUpButton>
           {/* If signed out then show SignInButton */}
           <SignInButton>
-            {/* Custom sign in button */}
+            {/* If signed out then show SignInButton */
+            /* Custom sign in button */}
             <Button
-              className="bg-slate-900 hover:bg-slate-950"
+              className="bg-slate-900 text-base hover:bg-slate-950"
               onClick={() => router.push("/sign-in")}
             >
               Sign In
             </Button>
           </SignInButton>
         </SignedOut>
-
-        <SignedIn>
-          {/* If user signed in then show UserButton */}
-
-          {isSignedIn ? (
+        {/* {isSignedIn ? (
+          <SignedIn>
             <span className="text-white hidden md:block">
+              <strong> {user.fullName}</strong>
+            </span>
+            <UserButton afterSignOutUrl={"/"} />
+          </SignedIn>
+        ) : (
+          <>
+            {isSignedIn === undefined ? (
+              <>
+                <Skeleton className="w-20 h-8" />
+                <Skeleton className="w-20 h-8" />
+              </>
+            ) : (
+              
+            )}
+          </>
+        )} */}
+
+        {/* If user signed in then show UserButton */}
+        <SignedIn>
+          {isSignedIn ? (
+            <span className="text-white pl-4 py-2 hidden md:block">
               <strong> {user.fullName}</strong>
             </span>
           ) : (

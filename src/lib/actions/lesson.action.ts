@@ -3,6 +3,7 @@
 import Account from "../models/account.model";
 import Course from "../models/course.model";
 import Lesson from "../models/lesson.model";
+import LessonProgress from "../models/lessonProgress.model";
 import Video from "../models/video.model";
 import connectDB from "../mongoose";
 import { v4 as uuid } from "uuid";
@@ -92,15 +93,13 @@ export const UpdatePositionLesson = async (lessons: string) => {
 export const GetAllLessonByCourseId = async (course_id: string) => {
   try {
     await connectDB();
-    const course = await Course.findOne({ id: course_id });
+    // const course = await Course.findOne({ id: course_id });
 
-    if (!course) throw new Error("Course not found");
+    if (!course_id) throw new Error("Course not found");
 
-    const lessons = await Lesson.find({ course_id: course._id })
-      .populate("video")
-      .sort({
-        position: 1,
-      });
+    const lessons = await Lesson.find({ course_id }).populate("video").sort({
+      position: 1,
+    });
 
     return JSON.stringify(lessons);
   } catch (error: any) {
@@ -152,6 +151,10 @@ export const GetAllLessonsByCourseId = async ({
 export const GetLessonById = async (lesson_id: string) => {
   try {
     await connectDB();
+    // await Video.find({});
+    // await LessonProgress.find({});
+    // console.log("lesson_id", lesson_id);
+
     let lesson = await Lesson.findOne({ id: lesson_id })
       .populate("video")
       .populate("lessons_progress");

@@ -7,18 +7,20 @@ export interface ICourseParams {
   poster: string;
 }
 export interface ICourse {
+  _id: string;
   id: string;
   title: string;
   description: string;
   price: number;
   created_at: Date;
-  instructor_id: string;
+  instructor_id: IAccount;
   poster: string;
   isPublished: boolean;
   lessons: ILesson[];
 }
 
 export interface IAccount {
+  _id: string;
   id: string;
   name: string;
   email: string;

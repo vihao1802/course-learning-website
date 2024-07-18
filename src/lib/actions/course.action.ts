@@ -49,7 +49,9 @@ export const GetCourseById = async (courseId: string) => {
   try {
     await connectDB();
     return JSON.stringify(
-      await Course.findOne({ id: courseId }).populate("lessons")
+      await Course.findOne({ id: courseId })
+        .populate("lessons")
+        .populate("instructor_id")
     );
   } catch (error: any) {
     throw new Error("Error at GetCourseById: ", error.message);
@@ -98,7 +100,9 @@ export const GetCoursesTeachingByAccountId = async (userId: string) => {
 export const GetAllCourses = async () => {
   try {
     await connectDB();
-    return JSON.stringify(await Course.find().sort({ created_at: -1 }));
+    return JSON.stringify(
+      await Course.find().sort({ created_at: -1 }).populate("instructor_id")
+    );
   } catch (error: any) {
     throw new Error("Error at GetAllCourses: ", error.message);
   }
