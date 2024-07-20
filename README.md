@@ -3,14 +3,12 @@
 
 <div align="center">
     <a href="https://github.com/vihao1802/course-learning-website/pulls">
-        <img src="https://img.shields.io/github/issues-pr-closed/vihao1802/course-learning-website
-        "
+        <img src="https://img.shields.io/github/issues-pr-closed/vihao1802/course-learning-website"
         alt="Pull Requests Badge"
          />
     </a>
     <a href="https://github.com/vihao1802/course-learning-website/graphs/contributors">
-        <img src="https://img.shields.io/github/contributors/vihao1802/course-learning-website
-        "
+        <img src="https://img.shields.io/github/contributors/vihao1802/course-learning-website"
         alt="Contributors Badge"
          />
     </a>
@@ -55,43 +53,45 @@ Link: [Course-Learning-Database-Diagram](https://drawsql.app/teams/team-project-
 
 ### Installation
 
-<ol>
-  <li>
-    <p>
-        In `root` directory, install all dependencies in `package.json`
-    </p>
-    ``` 
-    npm i
-    ```
-  </li>
-  <li>
-    <p>
-        In `root` directory, create `.env.local` file with the content shown below
-    </p>
-    ```
-        NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
-        NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+- Manually
 
-        NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
-        CLERK_SECRET_KEY=
+In `root` directory, install all dependencies in `package.json`
 
-        MONGODB_URL=your-url-to-mongdb-database-cloud
+```
+npm i
+```
 
-        FIREBASE_API_KEY=
-        FIREBASE_AUTH_DOMAIN=
-        FIREBASE_PROJECT_ID=
-        FIREBASE_STORAGE_BUCKET=
-        FIREBASE_MESSAGING_SENDER_ID=
-        FIREBASE_APP_ID=
-    ```
+In `root` directory, create `.env.local` file with the content was shown below
 
-  </li>
-  <li>
-    <p>
-        Run the app
-    </p>
-    ``` 
-    npm run dev
-    ```
-  </li>
-</ol>
+```
+    NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+    NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+    CLERK_SECRET_KEY=
+
+    MONGODB_URL=your-url-to-mongdb-database-cloud
+
+    FIREBASE_API_KEY=
+    FIREBASE_AUTH_DOMAIN=
+    FIREBASE_PROJECT_ID=
+    FIREBASE_STORAGE_BUCKET=
+    FIREBASE_MESSAGING_SENDER_ID=
+    FIREBASE_APP_ID=
+```
+
+Run the app
+
+```
+npm run dev
+```
+
+- Docker hub
+
+```
+docker pull namelessh/course-learning-website:latest
+```
+
+```
+docker run -dp 3001:3000 namelessh/course-learning-website
+```
