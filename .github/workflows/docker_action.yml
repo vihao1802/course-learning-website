@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    name: Building and Running Section
+    name: Deploying to Docker Hub Section
     runs-on: ubuntu-latest
 
     steps:

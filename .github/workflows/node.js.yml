@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: Building and Running Section
+    name: Installing, Building and Testing Section
     runs-on: ubuntu-latest
 
     strategy:
