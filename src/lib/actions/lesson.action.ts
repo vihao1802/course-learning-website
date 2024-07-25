@@ -152,7 +152,7 @@ export const GetLessonById = async (lesson_id: string) => {
   try {
     await connectDB();
     // await Video.find({});
-    // await LessonProgress.find({});
+    await LessonProgress.find({});
     // console.log("lesson_id", lesson_id);
 
     let lesson = await Lesson.findOne({ id: lesson_id })
@@ -178,6 +178,7 @@ export const GetLessonByAccountIdAndLessonId = async ({
     await connectDB();
     const account = await Account.findOne({ id: accountId });
     if (!account) throw new Error("Account not found");
+    await LessonProgress.find({});
 
     const lesson = await Lesson.findOne({ id: lessonId })
       .populate("video")
