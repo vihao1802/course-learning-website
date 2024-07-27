@@ -172,7 +172,7 @@ const LessonPage = () => {
                   <h1 className="text-xl font-bold">Video unavailable</h1>
                 </div>
               )}
-              {/* {!isLoading && lesson && lesson.video.videoUrl !== "" && (
+              {!isLoading && lesson && lesson.video.videoUrl !== "" && (
                 <video
                   className="w-full h-full object-cover"
                   controls
@@ -187,7 +187,7 @@ const LessonPage = () => {
                   />
                   Your browser does not support the video tag.
                 </video>
-              )} */}
+              )}
             </div>
           </div>
           <div className="p-3 space-y-4 flex-grow">
