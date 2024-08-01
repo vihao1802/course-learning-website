@@ -9,7 +9,7 @@ import { ICourse } from "../../types";
 
 const CourseCard: FC<{ course: ICourse }> = ({ course }) => {
   return (
-    <div className="relative w-full h-auto sm:min-h-[350px] shadow-lg rounded-md flex flex-col border border-gray-300">
+    <div className="relative w-full h-auto sm:min-h-[350px] shadow-none sm:shadow-lg rounded-md flex flex-col border border-gray-300">
       <Link
         href={`/course/detail/${course.id}`}
         className="absolute top-0 left-0 h-full w-full z-50"

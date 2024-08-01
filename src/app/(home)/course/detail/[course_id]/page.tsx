@@ -118,7 +118,7 @@ const CourseDetailPage = () => {
     );
 
   return (
-    <main className="max-w-[1000px] w-full mx-auto h-auto p-6">
+    <main className="max-w-[1000px] w-full mx-auto h-auto p-3 sm:p-6">
       <Button onClick={() => router.push("/")} className="text-black p-0 mb-2">
         <ArrowLeftIcon />
         <p className="ml-2">Back to home</p>
@@ -130,7 +130,7 @@ const CourseDetailPage = () => {
         <InstructorInfo account={course.instructor_id} />
         <div>
           <div className="relative grid grid-cols-1 lg:grid-cols-3 gap-5">
-            <div className="col-span-2">
+            <div className="col-span-1 lg:col-span-2">
               <div className="relative aspect-video">
                 <Image
                   priority
