@@ -29,7 +29,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="max-w-[1000px] w-full mx-auto h-auto p-6">
+    <main className="max-w-[1000px] w-full mx-auto h-auto p-3 sm:p-6">
       <div className="flex flex-col sm:flex-row justify-between gap-3 sm:items-center">
         <h1 className="text-2xl font-bold ">All course</h1>
         {/* <div className="w-auto flex flex-row items-center gap-2 h-full p-2 border-2 border-gray-600 rounded-md ">
@@ -46,7 +46,7 @@ export default function Home() {
           />
         </div> */}
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 w-full mt-5 sm:mt-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-8 w-full mt-5 sm:mt-10">
         {!isLoading
           ? courses.map((course) => (
               <CourseCard key={course.id} course={course} />
