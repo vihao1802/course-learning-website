@@ -11,7 +11,7 @@ export default function AuthLayout({
 
   return (
     <section className="h-full">
-      <div className="fixed top-0 z-50 w-full h-[60px] px-12 py-4">
+      <div className="fixed top-0 z-50 w-full h-[60px] px-5 md:px-12 py-4">
         <Image
           src={"/icons/back.png"}
           alt="Logo Back"

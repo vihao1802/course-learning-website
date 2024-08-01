@@ -38,13 +38,13 @@ const YourCoursePage = () => {
   }, [user]);
 
   return (
-    <main className="max-w-[1200px] w-full mx-auto h-auto p-6">
+    <main className="max-w-[1200px] w-full mx-auto h-auto p-3 sm:p-6">
       <div className="w-full text-left mb-6">
         <h1 className="text-2xl font-bold mb-2">Courses</h1>
         <p className="text-gray-600">View and manage courses</p>
       </div>
-      <div className="flex flex-row justify-between items-center mb-4">
-        <div className="w-auto flex flex-row items-center gap-2 h-full py-1 px-2 border-2 border-gray-600 rounded-md ">
+      <div className="flex flex-row justify-end items-center mb-4">
+        {/* <div className="w-auto flex flex-row items-center gap-2 h-full py-1 px-2 border-2 border-gray-600 rounded-md ">
           <Image
             src={"/icons/search-outline.svg"}
             alt={"Icon Search"}
@@ -56,7 +56,7 @@ const YourCoursePage = () => {
             type="text"
             placeholder="Search..."
           />
-        </div>
+        </div> */}
         <Button
           className=" bg-slate-600 hover:bg-slate-800"
           onClick={() => router.push("/course/create")}

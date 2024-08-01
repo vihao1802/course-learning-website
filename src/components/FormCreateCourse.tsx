@@ -160,7 +160,7 @@ const FormCreateCourse = () => {
             <FormItem>
               <FormLabel>
                 Poster
-                <div className="w-full h-[400px] bg-gray-200 rounded-lg">
+                <div className="aspect-video bg-gray-200 rounded-lg">
                   {field.value ? (
                     <div className="w-full h-full relative ">
                       <Image

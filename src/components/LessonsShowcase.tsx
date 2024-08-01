@@ -69,7 +69,7 @@ const LessonsShowcase = ({
                 alt="Logo next"
                 width="0"
                 height="0"
-                className="p-[6px] w-[5%]"
+                className="p-[6px] w-[5%] hidden md:block"
               />
             </div>
           ))}
