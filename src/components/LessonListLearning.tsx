@@ -46,7 +46,7 @@ const LessonListLearning = ({
   }, [user]);
 
   return (
-    <div className="flex flex-col overflow-y-auto ">
+    <div className="flex flex-col overflow-y-auto h-full">
       {lessons &&
         lessons.map((lesson, index) => (
           <div

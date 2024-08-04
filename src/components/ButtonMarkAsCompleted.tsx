@@ -47,7 +47,7 @@ const ButtonMarkAsCompleted = ({
       ) : lesson.lessons_progress.find((item) => item.lesson_id === lesson._id)
           ?.isCompleted ? (
         <Button
-          className="px-2 py-1 border-2 bg-gray-500 hover:bg-gray-600"
+          className="w-full md:w-auto px-2 py-1 border-2 bg-gray-500 hover:bg-gray-600"
           onClick={() => markAsCompleted(false)}
         >
           <CircleXIcon width={22} height={22} className="mr-2" />
@@ -55,7 +55,7 @@ const ButtonMarkAsCompleted = ({
         </Button>
       ) : (
         <Button
-          className="px-2 py-1 border-2 bg-green-500  hover:bg-green-600"
+          className="w-full md:w-auto px-2 py-1 border-2 bg-green-500  hover:bg-green-600"
           onClick={() => markAsCompleted(true)}
         >
           <Image
