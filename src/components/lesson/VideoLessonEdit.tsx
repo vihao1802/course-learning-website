@@ -229,7 +229,7 @@ const VideoLessonEdit = ({
                         </div>
                       </div>
                     ) : (
-                      <div className="h-[350px] mt-3 rounded-md bg-white flex justify-center items-center ">
+                      <div className="aspect-video mt-3 rounded-md bg-white flex justify-center items-center ">
                         <VideoIcon width={70} height={70} />
                       </div>
                     )}

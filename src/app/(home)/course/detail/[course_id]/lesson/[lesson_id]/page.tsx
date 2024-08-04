@@ -14,7 +14,12 @@ import { RingLoader } from "react-spinners";
 import LessonListLearning from "@/components/LessonListLearning";
 import { UpdateStatusLessonProgress } from "@/lib/actions/lessonProgress.action";
 import { useUser } from "@clerk/nextjs";
-import { ArrowLeftFromLine, CircleCheckBigIcon, FrownIcon } from "lucide-react";
+import {
+  ArrowLeftFromLine,
+  CircleCheckBigIcon,
+  FrownIcon,
+  AlignLeftIcon,
+} from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -25,6 +30,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import ButtonMarkAsCompleted from "@/components/ButtonMarkAsCompleted";
 import LessonProgressBar from "@/components/LessonProgressBar";
 import ProgressBar from "@/components/ProgressBar";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+} from "@/components/ui/sheet";
 
 const LessonPage = () => {
   const { user } = useUser();
@@ -41,6 +53,7 @@ const LessonPage = () => {
   const [result, setResult] = useState(0);
   const [key, setKey] = useState(0);
   const [lessons, setLessons] = useState<ILesson[] | []>([]);
+  const [isOpen, setIsOpen] = useState(false);
 
   // get lesson by id
   useEffect(() => {
@@ -156,7 +169,7 @@ const LessonPage = () => {
 
   return (
     <div className="relative  h-[calc(100vh-60px)]  flex flex-row gap-2 ">
-      <div className="w-2/3 flex flex-col bg-gray-50">
+      <div className="w-full md:w-2/3 flex flex-col bg-gray-50">
         <div className="flex flex-col overflow-auto h-full">
           <div className=" bg-white">
             <div className="relative aspect-video">
@@ -191,7 +204,7 @@ const LessonPage = () => {
             </div>
           </div>
           <div className="p-3 space-y-4 flex-grow">
-            <div className="flex flex-row justify-between ">
+            <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-0">
               {user ? (
                 <ButtonMarkAsCompleted
                   key={key}
@@ -202,7 +215,7 @@ const LessonPage = () => {
               ) : (
                 <Skeleton className=" w-44 h-10 bg-gray-400" />
               )}
-              <div className="flex flex-row justify-end gap-2">
+              <div className="hidden md:flex flex-row justify-end gap-2">
                 {isLoadingCurIndex && (
                   <Skeleton className="w-[120px] h-10 bg-gray-400" />
                 )}
@@ -229,26 +242,28 @@ const LessonPage = () => {
             </div>
             <div className="space-y-4 text-lg">
               <h2 className="text-xl font-bold">About the lesson</h2>
-              <div className=" flex flex-row justify-between">
+              <div className=" flex flex-row justify-between gap-2">
                 <p>Title:</p>
                 {lesson ? (
-                  <p className="font-bold">{lesson.title}</p>
+                  <p className="font-bold text-right">{lesson.title}</p>
                 ) : (
                   <Skeleton className="w-44 h-7 bg-gray-400" />
                 )}
               </div>
-              <div className="flex flex-row justify-between">
+              <div className="flex flex-row justify-between gap-2">
                 <p>Created Date:</p>
                 {lesson ? (
-                  <p className="font-bold">{formatDate(lesson.created_at)}</p>
+                  <p className="font-bold text-right">
+                    {formatDate(lesson.created_at)}
+                  </p>
                 ) : (
                   <Skeleton className="w-44 h-7 bg-gray-400" />
                 )}
               </div>
-              <div className="flex flex-row justify-between">
+              <div className="flex flex-row justify-between gap-2">
                 <p>Duration:</p>
                 {lesson ? (
-                  <p className="font-bold">
+                  <p className="font-bold text-right">
                     {formatSecond(lesson.video.duration)}
                   </p>
                 ) : (
@@ -262,7 +277,7 @@ const LessonPage = () => {
           </div>
         </div>
       </div>
-      <div className="fixed top-[60px] right-0 bottom-0 w-1/3">
+      <div className="hidden md:block fixed top-[60px] right-0 bottom-0 w-1/3">
         <div className="flex flex-col h-full ">
           {result === 100 && (
             <div className="w-full text-center py-4  bg-green-700">
@@ -317,6 +332,84 @@ const LessonPage = () => {
           />
         </div>
       </div>
+      <div className="fixed md:hidden bottom-0 h-[60px] w-full flex justify-between items-center px-2 bg-slate-200">
+        <Button onClick={() => setIsOpen(!isOpen)} className="text-black p-0">
+          <AlignLeftIcon />
+        </Button>
+        <div className="flex flex-row justify-end gap-2">
+          {isLoadingCurIndex && (
+            <Skeleton className="w-[120px] h-10 bg-gray-400" />
+          )}
+          {isLoadingCurIndex && (
+            <Skeleton className="w-[120px] h-10 bg-gray-400" />
+          )}
+          {currentIndex > 0 && (
+            <Button
+              className="w-[120px] py-1 border-2 bg-white text-slate-700 border-slate-700 hover:bg-white"
+              onClick={handleClickPrev}
+            >
+              Previous
+            </Button>
+          )}
+          {currentIndex < lessonIds.length - 1 && (
+            <Button
+              className="w-[120px] py-1 border-2 border-slate-700 bg-slate-700 hover:bg-slate-950"
+              onClick={handleClickNext}
+            >
+              Next
+            </Button>
+          )}
+        </div>
+      </div>
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetContent side={"left"} className="p-0 h-full">
+          <SheetDescription></SheetDescription>
+          <SheetTitle className="text-left text-xl font-bold py-2 px-4">
+            <p>Lessons</p>
+          </SheetTitle>
+          <div className="flex flex-col w-full h-[calc(100vh_-_44px)]">
+            {result === 100 && (
+              <div className="w-full text-center py-3 px-4 bg-green-700">
+                <p className="text-white text-base text-left flex flex-row justify-start items-start gap-2 ">
+                  <CircleCheckBigIcon width={22} height={22} />
+                  Congrats! You&apos;ve completed this course
+                </p>
+              </div>
+            )}
+            <div className="px-4 pt-2 space-y-2">
+              <div className="flex flex-row justify-between items-center">
+                <h2 className="font-bold text-xl">Your progress</h2>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        className="border bg-white text-gray-400 hover:text-gray-600 p-2 space-x-1 gap-1 items-center"
+                        onClick={() =>
+                          router.replace(`/course/detail/${course_id}`)
+                        }
+                      >
+                        <ArrowLeftFromLine />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="left">Leave</TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+              <div className="text-right pb-2 text-green-600">
+                <ProgressBar value={result} />
+                <span>Completed {result}%</span>
+              </div>
+            </div>
+            <div className="h-[calc(100vh_-_212px)]">
+              <LessonListLearning
+                key={key}
+                courseId={course_id}
+                currentLessonId={lesson_id}
+              />
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };

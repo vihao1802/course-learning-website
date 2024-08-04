@@ -3,7 +3,7 @@ import DescriptionCourseEdit from "@/components/CourseEdit/DescriptionCourseEdit
 import PosterCourseEdit from "@/components/CourseEdit/PosterCourseEdit";
 import TitleCourseEdit from "@/components/CourseEdit/TitleCourseEdit";
 import { Button } from "@/components/ui/button";
-import { GetCourseById } from "@/lib/actions/course.action";
+import { ChangeCourseStatus, GetCourseById } from "@/lib/actions/course.action";
 import { useUser } from "@clerk/nextjs";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -32,6 +32,17 @@ const CourseEditPage = () => {
       toast.error("Something went wrong!");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const changeCourseStatusEvent = async () => {
+    if (!course) return toast.error("Don't have course information yet");
+    try {
+      await ChangeCourseStatus(course._id, course.isPublished);
+      fetchData();
+      toast.success("Course status changed");
+    } catch {
+      toast.error("Something went wrong at changeCourseStatus");
     }
   };
 
@@ -82,11 +93,7 @@ const CourseEditPage = () => {
                     course.isPublished,
                 }
               )}
-              onClick={() => {
-                // fetchData();
-                router.refresh();
-                toast.success("Course status changed");
-              }}
+              onClick={changeCourseStatusEvent}
             >
               {course.isPublished ? "Unpublish" : "Publish"}
             </Button>

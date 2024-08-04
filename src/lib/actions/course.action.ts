@@ -101,7 +101,9 @@ export const GetAllCourses = async () => {
   try {
     await connectDB();
     return JSON.stringify(
-      await Course.find().sort({ created_at: -1 }).populate("instructor_id")
+      await Course.find({ isPublished: true })
+        .sort({ created_at: -1 })
+        .populate("instructor_id")
     );
   } catch (error: any) {
     throw new Error("Error at GetAllCourses: ", error.message);
@@ -155,5 +157,24 @@ export const UpdatePriceCourse = async (courseId: string, value: number) => {
     await Course.findOneAndUpdate({ id: courseId }, { price: value });
   } catch (error: any) {
     throw new Error("Error at UpdateCourse: ", error.message);
+  }
+};
+
+// change course status by course id
+export const ChangeCourseStatus = async (
+  courseId: string,
+  isPublished: Boolean
+) => {
+  try {
+    await connectDB();
+    console.log("CourseId:", courseId);
+
+    const updatedCourse = await Course.findOneAndUpdate(
+      { _id: courseId },
+      { isPublished: !isPublished }
+    );
+    console.log("Updated Course:", updatedCourse);
+  } catch (error: any) {
+    throw new Error("Error at ChangeCourseStatus: ", error.message);
   }
 };
