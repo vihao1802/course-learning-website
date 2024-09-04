@@ -16,6 +16,7 @@
 </div>
 
 ## About the project
+![image](https://github.com/user-attachments/assets/d5cbd635-44c6-4588-854c-0db5f866f5cb)
 
 ### Tech stack
 
