@@ -16,7 +16,18 @@
 </div>
 
 ## About the project
+- Home
+
 ![image](https://github.com/user-attachments/assets/d5cbd635-44c6-4588-854c-0db5f866f5cb)
+
+- Course Learning
+
+![Screenshot 2024-12-01 161453](https://github.com/user-attachments/assets/0c2c6a71-cfca-4d77-9b03-e5eeae36faca)
+
+- Course List Management
+
+![Screenshot 2024-12-01 161518](https://github.com/user-attachments/assets/b7ce5c24-6101-446e-8848-298672c5d8a9)
+
 
 ### Tech stack
 
